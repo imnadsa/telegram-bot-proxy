@@ -1,0 +1,14 @@
+{
+  "name": "telegram-bot-proxy",
+  "version": "1.0.0",
+  "description": "Безопасный прокси для отправки сообщений в Telegram бот",
+  "main": "api/send-telegram.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "node api/send-telegram.js"
+  },
+  "keywords": ["telegram", "bot", "proxy"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {}
+}
