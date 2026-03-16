@@ -1,5 +1,4 @@
 export default async function handler(req, res) {
-  // Добавляем CORS headers
   res.setHeader('Access-Control-Allow-Credentials', 'true')
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
@@ -8,35 +7,32 @@ export default async function handler(req, res) {
     'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
   )
 
-  // Обработка preflight запроса
   if (req.method === 'OPTIONS') {
     res.status(200).end()
     return
   }
 
-  // Разрешаем только POST запросы
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
-  // Получаем данные из тела запроса
-  const { name, phone } = req.body
+  const { name, phone, role } = req.body
 
-  // Проверяем обязательные поля
   if (!name || !phone) {
     return res.status(400).json({ error: 'Name and phone are required' })
   }
 
   try {
-    // Формируем сообщение
-    const message = `🔔 Новая заявка из попапа
+    // Определяем источник заявки по наличию role
+    const source = role ? '💊 Сколько Денег' : '🤖 Hippocrat AI'
+
+    const message = `🔔 Новая заявка — ${source}
 
 👤 Имя: ${name}
-📞 Телефон: ${phone}
+📞 Телефон: ${phone}${role ? `\n💼 Роль: ${role}` : ''}
 
 📅 Дата: ${new Date().toLocaleString('ru-RU')}`
 
-    // Берем токен из переменной окружения (защищено!)
     const botToken = process.env.TELEGRAM_BOT_TOKEN
     const chatId = process.env.TELEGRAM_CHAT_ID
 
@@ -45,14 +41,11 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'Server configuration error' })
     }
 
-    // Отправляем сообщение в Telegram
     const response = await fetch(
       `https://api.telegram.org/bot${botToken}/sendMessage`,
       {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           chat_id: chatId,
           text: message,
