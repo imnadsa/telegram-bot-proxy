@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
-  const { name, phone, role } = req.body
+  const { name, phone, role, contactMethod } = req.body
 
   if (!name || !phone) {
     return res.status(400).json({ error: 'Name and phone are required' })
@@ -29,7 +29,7 @@ export default async function handler(req, res) {
     const message = `🔔 Новая заявка — ${source}
 
 👤 Имя: ${name}
-📞 Телефон: ${phone}${role ? `\n💼 Роль: ${role}` : ''}
+📞 Телефон: ${phone}${role ? `\n💼 Роль: ${role}` : ''}${contactMethod ? `\n💬 Связаться через: ${contactMethod}` : ''}
 
 📅 Дата: ${new Date().toLocaleString('ru-RU')}`
 
