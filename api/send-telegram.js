@@ -16,15 +16,22 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
-  const { name, phone, role, contactMethod } = req.body
+  const { name, phone, role, contactMethod, source: sourceKey } = req.body
 
   if (!name || !phone) {
     return res.status(400).json({ error: 'Name and phone are required' })
   }
 
   try {
-    // Определяем источник заявки по наличию role
-    const source = role ? '💊 Сколько Денег' : '🤖 Hippocrat AI'
+    // Источник заявки: явный параметр source имеет приоритет,
+    // fallback — по наличию role (legacy для старых интеграций)
+    const sourceMap = {
+      hippocrat: '🩺 Hippocrat Digital',
+      skolkodeneg: '💊 Сколько Денег',
+      ai: '🤖 Hippocrat AI',
+    }
+    const source =
+      sourceMap[sourceKey] || (role ? '💊 Сколько Денег' : '🤖 Hippocrat AI')
 
     const message = `🔔 Новая заявка — ${source}
 
@@ -65,3 +72,4 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: error.message })
   }
 }
+
