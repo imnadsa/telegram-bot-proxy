@@ -28,6 +28,7 @@ export default async function handler(req, res) {
     const sourceMap = {
       hippocrat: '🩺 Hippocrat Digital',
       skolkodeneg: '💊 Сколько Денег',
+      skolkoreglamentov: '📋 Сколько Регламентов',
       ai: '🤖 Hippocrat AI',
     }
     const source =
