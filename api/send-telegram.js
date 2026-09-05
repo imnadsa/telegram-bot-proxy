@@ -29,6 +29,7 @@
         hippocrat: '🩺 Hippocrat Digital',
         skolkodeneg: '💊 Сколько Денег',
         skolkoreglamentov: '📋 Сколько Регламентов',
+        skolkorassylok: '✉️ Сколько Рассылок',
         ai: '🤖 Hippocrat AI',
       }
       const source =
